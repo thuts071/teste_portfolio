@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arthur Pereira | Engenharia da Computação</title>
+    <title>Arthur Pereira | Portfólio</title>
     
     <!-- Bibliotecas -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -12,36 +12,41 @@
     <style>
         :root {
             --primary: #38bdf8;
-            --primary-glow: rgba(56, 189, 248, 0.5);
-            --bg-dark: #020617;
-            --card-bg: rgba(15, 23, 42, 0.6);
+            --primary-glow: rgba(56, 189, 248, 0.4);
+            --bg-dark: #030712; /* Mais escuro para destacar o brilho */
+            --card-bg: rgba(17, 24, 39, 0.7);
             --text-slate: #94a3b8;
-            --accent: #0ea5e9;
+            --border-color: rgba(255, 255, 255, 0.1);
         }
 
         * {
-            margin: 0; padding: 0; box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Inter', 'Segoe UI', sans-serif;
             scroll-behavior: smooth;
         }
 
         body {
             background-color: var(--bg-dark);
-            color: #f1f5f9;
+            color: #f8fafc;
             overflow-x: hidden;
-            line-height: 1.6;
+            cursor: default;
         }
 
-        /* --- Fundo Tecnológico Estático --- */
-        .tech-bg {
+        /* --- Efeito de Mouse Glow --- */
+        #mouse-glow {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 50%),
-                linear-gradient(rgba(56, 189, 248, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(56, 189, 248, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 50px 50px, 50px 50px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
             z-index: -1;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            filter: blur(80px);
+            opacity: 0.5;
         }
 
         /* --- Custom Scrollbar --- */
@@ -49,38 +54,58 @@
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
 
-        /* --- Header --- */
+        /* --- Floating Icons Refinados --- */
+        .floating-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .icon-float {
+            position: absolute;
+            color: var(--primary);
+            opacity: 0.1;
+            font-size: 1.5rem;
+            filter: blur(1px);
+        }
+
+        /* --- Header Premium --- */
         header {
             position: fixed;
             top: 0; width: 100%;
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(15px);
-            padding: 1.2rem 10%;
+            padding: 1.5rem 10%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo-container { display: flex; align-items: center; gap: 12px; }
         .profile-img {
             width: 45px; height: 45px;
-            border-radius: 12px;
+            border-radius: 12px; /* Quadrado arredondado estilo App */
             border: 2px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
+            object-fit: cover;
         }
-        .logo { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
+        .logo { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
 
-        nav ul { display: flex; list-style: none; gap: 25px; }
+        nav ul { display: flex; gap: 30px; list-style: none; }
         nav ul li a {
-            text-decoration: none; color: var(--text-slate);
-            font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
-            transition: 0.3s; letter-spacing: 1px;
+            text-decoration: none;
+            color: var(--text-slate);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.3s;
+            text-transform: uppercase;
         }
         nav ul li a:hover { color: var(--primary); }
 
-        /* --- Hero Section --- */
+        /* --- Hero Section (Efeito do Vídeo) --- */
         .hero {
             height: 100vh;
             display: flex;
@@ -88,284 +113,231 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            perspective: 1000px;
+            padding: 0 10%;
         }
 
         .hero h1 {
             font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: 900;
             line-height: 1;
             margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff 30%, var(--primary));
+            font-weight: 900;
+            background: linear-gradient(180deg, #fff 0%, #64748b 100%);
             -webkit-background-clip: text;
-            -webkit-fill-color: transparent;
-            color: transparent;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* --- Animação de Scroll Reveal (O segredo do vídeo) --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px) scale(0.95);
-            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
         }
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* --- Cards Estilo "Apple" --- */
-        section { padding: 120px 10%; }
-        
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            font-weight: 800;
-        }
-
+        /* --- Cards 3D & Glow (Efeito do Vídeo) --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            gap: 25px;
+            perspective: 1000px;
         }
 
         .card {
             background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 30px;
             border-radius: 24px;
-            padding: 40px;
-            transition: all 0.5s;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease-out, border-color 0.3s, box-shadow 0.3s;
+            transform-style: preserve-3d;
         }
 
+        /* Borda animada ao passar o mouse */
         .card:hover {
             border-color: var(--primary);
-            background: rgba(56, 189, 248, 0.05);
-            transform: translateY(-10px);
+            box-shadow: 0 0 30px rgba(56, 189, 248, 0.15);
         }
 
-        .card i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: block;
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(56, 189, 248, 0.1), transparent 40%);
+            z-index: 0;
+            pointer-events: none;
         }
+
+        .card * { position: relative; z-index: 1; }
 
         .img-projeto {
-            width: 100%; height: 220px;
-            object-fit: cover; border-radius: 16px;
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 16px;
             margin-bottom: 20px;
+            filter: grayscale(0.5);
+            transition: 0.5s;
         }
+        .card:hover .img-projeto { filter: grayscale(0); transform: scale(1.02); }
 
         .tag {
-            font-size: 0.7rem; font-weight: 700;
-            padding: 5px 12px; border-radius: 100px;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 6px;
             background: rgba(56, 189, 248, 0.1);
             color: var(--primary);
             border: 1px solid rgba(56, 189, 248, 0.2);
             margin-right: 5px;
         }
 
-        /* --- Seção de Vídeo (Vertical Adaptada) --- */
-        .video-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 30px;
+        /* --- Seções --- */
+        section { padding: 120px 10%; }
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 800;
         }
 
-        .video-container {
-            width: 100%; border-radius: 20px;
-            overflow: hidden; aspect-ratio: 16/9;
-            background: #000;
-        }
-
-        .video-vertical {
-            aspect-ratio: 9/16;
-            max-width: 300px; margin: 0 auto;
-        }
-
-        /* --- Floating Icons (Parallax Scroll) --- */
-        .floating-icon {
-            position: absolute;
-            color: var(--primary);
-            opacity: 0.1;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* --- Footer --- */
-        footer {
-            padding: 80px 10%;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .social-links a {
-            font-size: 1.5rem; color: var(--text-slate);
-            margin: 0 15px; transition: 0.3s;
-        }
-        .social-links a:hover { color: var(--primary); }
-
+        /* --- Mobile --- */
         @media (max-width: 768px) {
-            .video-grid { grid-template-columns: 1fr; }
+            header { padding: 1rem 5%; }
+            nav { display: none; }
             .hero h1 { font-size: 3.5rem; }
-            section { padding: 80px 5%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="tech-bg"></div>
+    <div id="mouse-glow"></div>
 
-    <!-- Ícones de Fundo com Parallax -->
-    <i class="fas fa-microchip floating-icon" style="top: 15%; left: 10%; font-size: 100px;" data-speed="0.1"></i>
-    <i class="fas fa-code floating-icon" style="top: 40%; right: 5%; font-size: 80px;" data-speed="0.2"></i>
-    <i class="fas fa-terminal floating-icon" style="top: 70%; left: 5%; font-size: 120px;" data-speed="0.15"></i>
+    <div class="floating-container" id="icon-bg">
+        <!-- Ícones gerados via JS para serem aleatórios -->
+    </div>
 
     <header>
         <div class="logo-container">
             <img src="https://lh3.googleusercontent.com/u/0/d/1546zJQzZ4PrstzjYGrPXEFKrDL5xMIsG" alt="Arthur" class="profile-img">
-            <div class="logo">ARTHUR PEREIRA</div>
+            <div class="logo">ARTHUR.PS</div>
         </div>
         <nav>
-            <ul id="nav-list">
-                <li><a href="#home">Home</a></li>
+            <ul>
                 <li><a href="#experiencias">Bio</a></li>
                 <li><a href="#projetos">Projetos</a></li>
                 <li><a href="#video">Edição</a></li>
+                <li><a href="#voluntariado">Social</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="hero" id="home">
-        <h1 class="reveal">Engineering<br>the Future.</h1>
-        <p class="reveal" style="font-size: 1.2rem; color: var(--text-slate);"><span id="typing-effect"></span></p>
-        <div class="reveal" style="margin-top: 40px;">
-            <i class="fas fa-chevron-down" style="animation: bounce 2s infinite; color: var(--primary);"></i>
+        <div data-aos="zoom-out" data-aos-duration="1500">
+            <p>Engenharia & Design</p>
+            <h1>Arthur Pereira</h1>
+            <div style="min-height: 30px;">
+                <span id="typing-effect" style="color: var(--text-slate); font-size: 1.1rem;"></span>
+            </div>
         </div>
     </section>
 
+    <!-- Experiências -->
     <section id="experiencias">
-        <h2 class="section-title reveal">Experiência</h2>
+        <h2 data-aos="fade-up">Carreira</h2>
         <div class="grid">
-            <div class="card reveal">
-                <i class="fas fa-layer-group"></i>
-                <h3>Aprendiz Administrativo</h3>
-                <p style="color: var(--primary); margin-bottom: 15px;">FIBRA | 2022</p>
-                <p>Gestão de processos licitatórios e domínio de ERP ProTheus.</p>
-                <div style="margin-top:20px"><span class="tag">SAP/ProTheus</span><span class="tag">Excel BI</span></div>
-            </div>
-            <div class="card reveal">
-                <i class="fas fa-shield-halved"></i>
-                <h3>Liderança Escoteira</h3>
-                <p style="color: var(--primary); margin-bottom: 15px;">2018 - Presente</p>
-                <p>Desenvolvimento de soft skills, resiliência e liderança estratégica em projetos sociais.</p>
-                <div style="margin-top:20px"><span class="tag">Liderança</span><span class="tag">Estratégia</span></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="projetos" style="background: rgba(56, 189, 248, 0.02);">
-        <h2 class="section-title reveal">Projetos de Engenharia</h2>
-        <div class="grid">
-            <div class="card reveal">
-                <img src="https://lh3.googleusercontent.com/u/0/d/1WQJ47vLVdUrNP12K7gEUEKmkc6yZVU1l" class="img-projeto">
-                <h3>Simulador Direct Drive DIY</h3>
-                <p>Desenvolvimento de hardware de alto torque com Arduino e motores Brushless.</p>
-                <div style="margin-top:15px"><span class="tag">Arduino</span><span class="tag">C++</span><span class="tag">PCB Design</span></div>
-            </div>
-            <div class="card reveal">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800" class="img-projeto">
+            <div class="card" data-aos="fade-up">
+                <i class="fas fa-microchip fa-2x" style="color:var(--primary); margin-bottom:20px"></i>
                 <h3>Sistemas Embarcados</h3>
-                <p>Implementação de RTOS em arquiteturas ARM para processamento em tempo real.</p>
-                <div style="margin-top:15px"><span class="tag">ARM</span><span class="tag">RTOS</span><span class="tag">Linux</span></div>
+                <p style="color: var(--text-slate); margin-top: 10px;">Desenvolvimento de firmware e integração de hardware de baixa latência.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-video fa-2x" style="color:var(--primary); margin-bottom:20px"></i>
+                <h3>Vídeo Creator</h3>
+                <p style="color: var(--text-slate); margin-top: 10px;">Storytelling visual e edição dinâmica para redes de alto engajamento.</p>
             </div>
         </div>
     </section>
 
-    <section id="video">
-        <h2 class="section-title reveal">Video Editing Portfolio</h2>
-        <div class="video-grid">
-            <div class="card reveal">
-                <div class="video-container">
-                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/SUA_ID_AQUI" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <h3 style="margin-top:20px">Documentário Solo - Peru</h3>
-                <p>Storytelling focado em experiência imersiva e color grading avançado.</p>
+    <!-- Projetos -->
+    <section id="projetos">
+        <h2 data-aos="fade-up">Destaques</h2>
+        <div class="grid">
+            <div class="card" data-aos="fade-up">
+                <img src="https://lh3.googleusercontent.com/u/0/d/1WQJ47vLVdUrNP12K7gEUEKmkc6yZVU1l" class="img-projeto">
+                <h3>Direct Drive Steering</h3>
+                <p style="font-size: 0.9rem; color: var(--text-slate); margin-bottom: 15px;">Simulador de direção construído do zero com Arduino e motores Brushless.</p>
+                <div><span class="tag">C++</span><span class="tag">Hardware</span></div>
             </div>
-            <div class="card reveal">
-                <div class="video-container video-vertical">
-                    <iframe width="100%" height="100%" src="https://www.tiktok.com/embed/7596729582523403521" frameborder="0" allowfullscreen></iframe>
-                </div>
-                <h3 style="margin-top:20px; text-align: center;">Short Form</h3>
-                <p style="text-align: center;">Retenção e viralização.</p>
-            </div>
+            <!-- Adicionar mais cards aqui -->
         </div>
     </section>
 
-    <footer>
-        <div class="social-links reveal">
-            <a href="#"><i class="fab fa-github"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-        <p style="margin-top: 30px; color: var(--text-slate); font-size: 0.8rem;">&copy; 2026 ARTHUR PEREIRA • COMPUTER ENGINEER</p>
-    </footer>
-
-    <!-- Scripts de Animação -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
 
     <script>
-        // 1. Efeito de Digitação
+        AOS.init({ duration: 1000, once: false });
+
+        // Typed.js
         new Typed('#typing-effect', {
-            strings: ['Computer Engineering Student', 'Video Editor', 'Hardware Developer', 'Eagle Scout'],
-            typeSpeed: 50,
-            backSpeed: 30,
+            strings: ['Construindo o futuro do hardware.', 'Editando histórias memoráveis.', 'Liderança no Escotismo.', 'Engenheiro de Computação.'],
+            typeSpeed: 40,
+            backSpeed: 20,
             loop: true
         });
 
-        // 2. Animação de Revelação ao Scroll (Estilo Apple do vídeo)
-        const observerOptions = {
-            threshold: 0.15
-        };
+        // Mouse Glow Effect
+        const glow = document.getElementById('mouse-glow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // 3. Efeito Parallax nos ícones de fundo (GSAP)
-        gsap.to(".floating-icon", {
-            scrollTrigger: {
-                scrub: true
-            },
-            y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed,
-            ease: "none"
-        });
-
-        // 4. Animação Suave nos Cards
-        gsap.utils.toArray('.card').forEach(card => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top bottom-=100",
-                    toggleActions: "play none none reverse"
-                },
-                opacity: 0,
-                y: 50,
-                duration: 1,
-                ease: "power4.out"
+            // Efeito de iluminação nos cards (Efeito do vídeo)
+            document.querySelectorAll('.card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                
+                // Efeito 3D Tilt suave
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
         });
+
+        // Resetar tilt ao sair do card
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            });
+        });
+
+        // Gerador de ícones flutuantes
+        const container = document.getElementById('icon-bg');
+        const icons = ['fa-code', 'fa-microchip', 'fa-video', 'fa-bolt', 'fa-terminal'];
+        
+        for(let i=0; i<15; i++) {
+            const icon = document.createElement('i');
+            icon.className = `fas ${icons[Math.floor(Math.random()*icons.length)]} icon-float`;
+            icon.style.left = Math.random() * 100 + 'vw';
+            icon.style.top = Math.random() * 100 + 'vh';
+            icon.style.animation = `float ${10 + Math.random()*20}s infinite linear`;
+            container.appendChild(icon);
+        }
     </script>
+
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.15; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
 </body>
 </html>
