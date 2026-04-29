@@ -223,6 +223,15 @@
             border-color: rgba(56, 189, 248, 0.4);
         }
 
+        .card video, 
+        .card h3, 
+        .card p, 
+        .card .card-icon, 
+        .card .tag-container {
+        position: relative;
+        z-index: 2; /* Isso joga o conteúdo (e os botões do vídeo) para a frente */
+        }
+
         .card-icon {
             width: 50px; height: 50px;
             background: rgba(56, 189, 248, 0.1);
@@ -358,16 +367,18 @@
                 <p style="color:var(--text-dim);">Documentário de viagem focado em narrativa e color grading.</p>
             </div>
 
-            <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <div class="card" data-aos="fade-up" data-aos-delay="100" style="z-index: 10;">
             <!-- Removida a classe 'vertical' para voltar ao padrão 16/9 definido no seu CSS -->
          <div class="video-wrapper">
             <video 
-            src="https://github.com/thuts071/teste_portfolio/blob/main/0119.mp4" 
-            controls 
-            loop  
+            src="https://github.com/thuts071/teste_portfolio/raw/refs/heads/main/0119.mp4"
+            autoplay
+            muted
+            loop 
+            controls
             playsinline
             poster="SUA_IMAGEM_DE_CAPA.jpg"
-            style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+            style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; position: relative; z-index: 5;">
         </video>
     </div>
     <h3 style="margin-top:20px">Edit rápida da viagem ao Peru</h3>
